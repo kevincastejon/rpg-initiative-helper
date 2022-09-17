@@ -1,7 +1,7 @@
 {
   "name": "rpg-initiative-helper",
   "version": "0.1.0",
-  "homepage":"kevincastejon.github.io/rpg-initiative-helper/",
+  "homepage":"/rpg-initiative-helper/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
