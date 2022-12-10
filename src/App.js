@@ -53,6 +53,7 @@ class App extends Component {
     const editingRollBonus = itemEditingId.length > 0 ? items.find((itm)=>itm.id === itemEditingId).rollBonus : 0;
     return(
     <div>
+
     <div style={{position:'absolute', top:0,left:0,right:0,bottom:0}}
     onDrop={(e)=>{
         e.preventDefault();
@@ -60,7 +61,6 @@ class App extends Component {
           const itms = [...e.dataTransfer.items];
           Promise.all(itms.map(async(itm)=>await this.readFileAsDataURL(itm.getAsFile()))).then((images)=>{
             const newImages =images.map((img)=>({name:"", initiative:0, avatar:img, rollDice:0, rollBonus:0, id:uuidv4()}));
-            console.log(newImages);
             this.setState((prevState) => {
             return({
               items: [...prevState.items, ...newImages],
@@ -167,7 +167,7 @@ class App extends Component {
             return({
               items: mutatedItems
             });
-          })
+          });
         }}>
         Roll
         </Button>
@@ -183,6 +183,23 @@ class App extends Component {
         }}>
         Add
         </Button>
+        <Button onClick={(e)=>{
+          for (let i = 0; i < items.length; i++) {
+            let score = 0;
+            for (var j = 0; j < items[i].rollDice; j++) {
+              score += Math.ceil(Math.random()*6);
+            }
+            score += items[i].rollBonus;
+            items[i].initiative = score;
+          }
+          this.setState({items : items});
+        }}>Re-Roll All</Button>
+        <Button onClick={(e)=>{
+          for (let i = 0; i < items.length; i++) {
+            items[i].initiative = Math.max(items[i].initiative-10, 0);
+          }
+          this.setState({items : items});
+        }}>-10 All</Button>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         {items.sort((a,b)=>a.initiative<b.initiative?1:-1).map((item, id)=>(
           <ListItem key={id} alignItems="flex-start">
